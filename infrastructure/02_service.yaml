@@ -110,11 +110,11 @@ Resources:
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
       # "The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that allows Application Auto Scaling to modify your scalable target."
-      RoleARN: !GetAtt AutoScalingRole.Arn
+      RoleARN: {'Fn::ImportValue': !Sub '${NetworkingStackName}-AutoScalingRoleArn'}
   AutoScalingPolicy:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Join ['', [!Ref ServiceName, AutoScalingPolicy]]
+      PolicyName: !Join ['-', [!Ref EnvironmentName, AutoScalingPolicy]]
       PolicyType: TargetTrackingScaling
       ScalingTargetId: !Ref AutoScalingTarget
       TargetTrackingScalingPolicyConfiguration:
@@ -122,5 +122,5 @@ Resources:
           PredefinedMetricType: ECSServiceAverageCPUUtilization
         ScaleInCooldown: 10
         ScaleOutCooldown: 10
-        # Keep things at or lower than 50% CPU utilization, for example
-        TargetValue: !Ref AutoScalingTargetValue
+        # Keep things at or lower than 70% CPU utilization
+        TargetValue: 70
