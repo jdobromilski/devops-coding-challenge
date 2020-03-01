@@ -3,7 +3,7 @@ import datetime
 import os
 
 time_format = '%H:%M:%S'
-remote_url = 'http://jarek-loadb-p5u8hynioaq8-448639092.eu-west-1.elb.amazonaws.com/now'
+remote_url = 'http://jarek-myapp.com/now'
 
 def lambda_handler(event, context):
     if requests.get(remote_url).status_code == 200:
