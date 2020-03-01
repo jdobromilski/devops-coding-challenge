@@ -448,3 +448,9 @@ Outputs:
     Value: !GetAtt 'TaskRole.Arn'
     Export:
       Name: !Sub "${AWS::StackName}-TaskRoleArn"
+
+  AutoScalingRoleArn:
+    Description: The ARN of the AutoScaling role
+    Value: !GetAtt 'AutoScalingRole.Arn'
+    Export:
+      Name: !Sub "${AWS::StackName}-AutoScalingRoleArn"
