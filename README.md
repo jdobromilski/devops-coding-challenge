@@ -62,3 +62,42 @@ If we proceed to a phone interview, we’ll be asking questions about why you ma
 #### Why doesn't the test include X?
 
 Good question. Feel free to tell us how to make the test better. Or, you know, fork it and improve it!
+
+# Provisioning service
+
+#### Requirements
+
+The service can be provisioned using awscli although I found it useful to use NodeJs application called cfn-create-or-update. Thanks to that the service can be provisioned and updated using for example Jenkins task.
+https://github.com/widdix/cfn-create-or-update
+
+To install cfn-create-or-update nodejs needs to be installed on the system and we need to run the following command:
+
+npm install -g cfn-create-or-update
+
+#### Service provisioning
+To provision the service please run the following command:
+
+* Infrastructure:
+cfn-create-or-update --stack-name jarek-myapp-networking --template-body file://infrastructure/01_networking.yaml --capabilities CAPABILITY_IAM --region eu-west-1 --profile {your_aws_profile_name}
+
+* Service:
+cfn-create-or-update --stack-name jarek-myapp-containers --template-body file://02_service.yaml --region eu-west-1 --profile {your_aws_profile_name}
+
+#### Health check
+Correct operation of the service can be verified using simple AWS Lambda function:
+lambda://jarek-myapp-healthcheck
+
+* Code of the function resides in healthcheck directory - healthcheck.py. It requires python `requests` module and can be executed from command line.
+If required can be installed using:
+pip install requests
+
+* Lambda package - healthcheck script is also packaged with the right modules and zipped as healthcheck.zip in the root folder of the repo.
+
+* Lambda execution:
+The instance of the healthcheck is also deployed as an AWS Lambda function and can be executed directly from the console.
+Function name: jarek-myapp-healthcheck
+https://eu-west-1.console.aws.amazon.com/lambda/home?region=eu-west-1#/functions/jarek-myapp-healthcheck?tab=configuration
+
+* Result:
+  - it would return 'OK' if the service is running and the time difference is less than 1 second.
+  - it would return 'Failed' if the service is not available or the time difference is more than 1 second.
