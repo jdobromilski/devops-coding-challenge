@@ -93,6 +93,14 @@ pip install requests
 
 * Lambda package - healthcheck script is also packaged with the right modules and zipped as healthcheck.zip in the root folder of the repo.
 
+* Lambda - packaging software and updating lambda function
+In the healthcheck folder the following command needs to be run:
+zip -r9 ../healthcheck.zip .
+
+To upload new version of the function following command needs to be run in repository root folder:
+aws lambda update-function-code --function-name jarek-myapp-healthcheck --zip-file fileb://healthcheck.zip --profile {your_aws_profile_name}
+
+
 * Lambda execution:
 The instance of the healthcheck is also deployed as an AWS Lambda function and can be executed directly from the console.
 Function name: jarek-myapp-healthcheck
