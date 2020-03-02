@@ -21,7 +21,7 @@ def lambda_handler(event, context):
         time_difference = remote_time - local_time
         time_difference_in_seconds = time_difference.seconds
 
-        if time_difference_in_seconds >= 1:
+        if time_difference_in_seconds > 1:
             return "Failed"
         else:
             return "OK"
